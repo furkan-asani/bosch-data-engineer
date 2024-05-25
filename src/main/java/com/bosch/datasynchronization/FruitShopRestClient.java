@@ -72,24 +72,19 @@ public class FruitShopRestClient {
     private List<Product> fetchProducts() throws IOException, InterruptedException {
         String url = baseUrl + "/shop/v2/products?sort=id&order=asc";
 
-        List<Product> paginatedData = getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetProductsResponse.class));
-
-        return paginatedData;
+        return getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetProductsResponse.class));
     }
 
     private List<Vendor> fetchVendors() throws IOException, InterruptedException {
         String url = baseUrl + "/shop/v2/vendors?sort=id&order=asc";
-        List<Vendor> paginatedData = getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetAllVendorsResponse.class));
 
-        return paginatedData;
+        return getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetAllVendorsResponse.class));
     }
 
     private List<Product> fetchProductsForVendor(int id) throws IOException, InterruptedException {
         String url = baseUrl + "/shop/v2/vendors/" + id + "/products?sort=id&order=asc";
 
-        List<Product> products = getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetProductsResponse.class));
-
-        return products;
+        return getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetProductsResponse.class));
     }
 
     private <R extends FruitShopResponse<E>, E> List<E> getPaginatedData(@NotNull String url, @NotNull Function<String, R> parseFunction) throws IOException, InterruptedException {
