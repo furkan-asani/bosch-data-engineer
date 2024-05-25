@@ -85,7 +85,7 @@ public class FruitShopRestClient {
     }
 
     private List<Product> fetchProductsForVendor(int id) throws IOException, InterruptedException {
-        String url = baseUrl + "/shop/v2/" + id + "/products?sort=id&order=asc";
+        String url = baseUrl + "/shop/v2/vendors/" + id + "/products?sort=id&order=asc";
 
         List<Product> products = getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetProductsResponse.class));
 
