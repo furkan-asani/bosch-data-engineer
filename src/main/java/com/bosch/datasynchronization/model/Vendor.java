@@ -4,31 +4,31 @@ import org.springframework.data.annotation.Id;
 
 public class Vendor {
     @Id
-    private String _id;
-    private String _name;
-    private String _selfLink;
+    private String id;
+    private String name;
+    private String selfLink;
 
     public String getId() {
-        return _id;
+        return id;
     }
 
-    public void setId(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
 
-    public void setName(String _name) {
-        this._name = _name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSelfLink() {
-        return _selfLink;
+        return selfLink;
     }
 
     public void setSelfLink(String _selfLink) {
-        this._selfLink = _selfLink;
+        this.selfLink = selfLink;
     }
 }
