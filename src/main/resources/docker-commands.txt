@@ -1,0 +1,2 @@
+PostgreSQL - docker run --name postgres_container -e POSTGRES_USER=application -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=fruitshop -p 5432:5432 -d postgres:latest
+MongoDB - docker run --name my-mongo -d -p 27017:27017 mongo:latest
