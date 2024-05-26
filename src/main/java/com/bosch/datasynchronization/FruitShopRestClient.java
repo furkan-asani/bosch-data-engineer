@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -125,5 +128,33 @@ public class FruitShopRestClient {
         }
 
         return data;
+    }
+
+    public byte[] getImageForProduct(int productId) {
+        String url = baseUrl + "/shop/v2/products/" + productId + "/image";
+        try {
+            HttpRequest request = HttpRequest.newBuilder(URI.create(url))
+                    .GET()
+                    .header("Content-Type", "application/json")
+                    .header("accept", "image/*")
+                    .build();
+
+            HttpResponse<byte[]> response = _httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
+            boolean validImage = isValidImage(response.body());
+            _log.info(() -> ""+validImage);
+
+            return response.body();
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean isValidImage(byte[] imageBytes) {
+        try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageBytes)) {
+            BufferedImage image = ImageIO.read(byteArrayInputStream);
+            return image != null;
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
