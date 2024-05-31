@@ -1,17 +1,16 @@
 package com.bosch.datasynchronization.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
 public class SynchronizationRun {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "lastrun")
-    private Date lastRun;
+    private Date lastRun = new Date();
 
     public int getId() {
         return id;

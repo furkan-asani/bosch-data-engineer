@@ -1,4 +1,4 @@
-package com.bosch.datasynchronization;
+package com.bosch.datasynchronization.client;
 
 import com.alibaba.fastjson.JSON;
 import com.bosch.datasynchronization.model.*;
@@ -16,7 +16,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -37,10 +42,10 @@ public class FruitShopRestClient {
         this._httpClient = httpClient;
     }
 
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts(Date lastRunTimestamp) {
         List<Product> products;
         try {
-            products = fetchProducts();
+            products = fetchProducts(lastRunTimestamp);
         } catch (IOException | InterruptedException e) {
             _log.log(Level.SEVERE, "Exception occurred while fetching products", e);
             return List.of();
@@ -72,8 +77,16 @@ public class FruitShopRestClient {
         return vendors;
     }
 
-    private List<Product> fetchProducts() throws IOException, InterruptedException {
+    private List<Product> fetchProducts(Date lastRunTimestamp) throws IOException, InterruptedException {
+
         String url = baseUrl + "/shop/v2/products?sort=id&order=asc";
+        if (lastRunTimestamp != null) {
+            Instant instant = lastRunTimestamp.toInstant();
+            ZonedDateTime zonedDateTime = instant.atZone(ZoneOffset.UTC);
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            String formattedZonedDatetime = formatter.format(zonedDateTime);
+            url += "&modified_since=" + formattedZonedDatetime;
+        }
 
         return getPaginatedData(url, (responseBody) -> JSON.parseObject(responseBody, GetProductsResponse.class));
     }
@@ -130,6 +143,22 @@ public class FruitShopRestClient {
         return data;
     }
 
+    public ProductDetail getProductDetails(int productId) {
+        String url = baseUrl + "/shop/v2/products/" + productId;
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder(URI.create(url))
+                    .GET()
+                    .header("Content-Type", "application/json")
+                    .build();
+            HttpResponse<String> response = _httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            return JSON.parseObject(response.body(), ProductDetail.class);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public byte[] getImageForProduct(int productId) {
         String url = baseUrl + "/shop/v2/products/" + productId + "/image";
         try {
@@ -140,8 +169,10 @@ public class FruitShopRestClient {
                     .build();
 
             HttpResponse<byte[]> response = _httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray());
-            boolean validImage = isValidImage(response.body());
-            _log.info(() -> ""+validImage);
+            boolean isValidImage = isValidImage(response.body());
+            if (!isValidImage) {
+                throw new IllegalStateException("The response could not be converted into an image");
+            }
 
             return response.body();
         } catch (IOException | InterruptedException e) {

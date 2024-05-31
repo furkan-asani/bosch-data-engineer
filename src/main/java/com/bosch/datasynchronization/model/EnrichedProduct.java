@@ -15,8 +15,9 @@ public class EnrichedProduct {
     private String  name;
     private Integer parentId;
     private List<Vendor> vendors;
-    private String  hash;
     private Binary image;
+    private double price;
+    private String color;
 
     public List<Vendor> getVendors() {
         return vendors;
@@ -58,19 +59,27 @@ public class EnrichedProduct {
         this.id = id;
     }
 
-    public String getHash() {
-        return hash;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
     public Binary getImage() {
         return image;
     }
 
     public void setImage(Binary image) {
         this.image = image;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
