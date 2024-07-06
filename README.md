@@ -1,6 +1,6 @@
 # Data Synchronization Service
 ## Overview
-This project is a Data Synchronization Service that keeps product and vendor information up-to-date between a REST API and a database. It's designed to ensure that our records always reflect the latest data from the remote source. This project showcases my ability to integrate different systems and manage data efficiently, which I believe are valuable skills for a position at Bosch.
+This project is a Data Synchronization Service that keeps product and vendor information up-to-date between a REST API and a database. It's designed to ensure that our records always reflect the latest data from the remote source. This project showcases my ability to integrate different systems and manage data efficiently, which I believe are valuable skills for a position at Bosch Rexroth.
 
 ## How It Works (Concise Version)
 1. Check Last Update: The service checks when the last synchronization was performed.
