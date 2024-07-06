@@ -76,4 +76,4 @@ Update the src/main/resources/application.properties file with your database con
 mvn spring-boot:run
 ```
 ## Conclusion
-This project demonstrates my ability to develop a robust data synchronization service, handle large datasets, and ensure data integrity between different systems. I am excited about the opportunity to bring these skills to Bosch and contribute to innovative projects.
+This project demonstrates my ability to develop a robust data synchronization service, handle large datasets, and ensure data integrity between different systems. I am excited about the opportunity to bring these skills to Bosch Rexroth and contribute to innovative projects.
